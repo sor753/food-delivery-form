@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldErrors } from 'react-hook-form';
 
 type FoodDeliveryFormType = {
   customerName: string;
@@ -12,7 +12,7 @@ const FoodDeliveryForm = () => {
     console.log('Form data:', formData);
   };
 
-  const onError = (errors: any) => {
+  const onError = (errors: FieldErrors<FoodDeliveryFormType>) => {
     console.log('Form errors:', errors);
   };
 
