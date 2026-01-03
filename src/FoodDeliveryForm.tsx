@@ -1,5 +1,6 @@
 import { useForm, type FieldErrors } from 'react-hook-form';
 import TextField from './controls/TextField';
+import getRenderCount from './utils/getRenderCount';
 
 type FoodDeliveryFormType = {
   orderNo: string;
@@ -7,6 +8,8 @@ type FoodDeliveryFormType = {
   mobile: string;
   email: string;
 };
+
+const RenderCount = getRenderCount();
 
 const FoodDeliveryForm = () => {
   const {
@@ -39,6 +42,7 @@ const FoodDeliveryForm = () => {
       noValidate
       onSubmit={handleSubmit(onSubmit, onError)}
     >
+      <RenderCount />
       <div className="row mb-2">
         <div className="col">
           <TextField
