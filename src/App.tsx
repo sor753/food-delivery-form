@@ -1,5 +1,5 @@
 import './App.css';
-import FoodDeliveryForm from './FoodDeliveryForm';
+import FoodDeliveryForm from './pages/FoodDelivery/FoodDeliveryForm';
 
 function App() {
   return (
