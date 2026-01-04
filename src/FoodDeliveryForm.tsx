@@ -1,45 +1,13 @@
-import { useForm, type FieldErrors } from 'react-hook-form';
+import { FormProvider, useForm, type FieldErrors } from 'react-hook-form';
 import TextField from './controls/TextField';
 import getRenderCount from './utils/getRenderCount';
-import Select from './controls/Select';
-import type { SelectOptionType } from './types';
-
-type FoodDeliveryFormType = {
-  orderNo: string;
-  customerName: string;
-  mobile: string;
-  email: string;
-  paymentMethod: string;
-  deliveryIn: number;
-  address: {
-    streetAddress: string;
-    landmark: string;
-    city: string;
-    state: string;
-  };
-};
-// const paymentOptions: SelectOptionType[] = ['slect', 'online', 'COD'];
-const paymentOptions: SelectOptionType[] = [
-  { value: '', text: 'Select' },
-  { value: 'online', text: 'Paid Online' },
-  { value: 'COD', text: 'Cash on Delivery' },
-];
-const deliveryOptions: SelectOptionType[] = [
-  { value: 0, text: 'Select' },
-  { value: 30, text: 'Half an Hour' },
-  { value: 60, text: '1 Hour' },
-  { value: 120, text: '2 Hours' },
-  { value: 180, text: '3 Hours' },
-];
+import CheckoutForm from './CheckoutForm';
+import type { FoodDeliveryFormType } from './types';
 
 const RenderCount = getRenderCount();
 
 const FoodDeliveryForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FoodDeliveryFormType>({
+  const method = useForm<FoodDeliveryFormType>({
     mode: 'all',
     delayError: 300,
     // reValidateMode: 'onChange',
@@ -58,6 +26,12 @@ const FoodDeliveryForm = () => {
       },
     },
   });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = method;
 
   const onSubmit = (formData: FoodDeliveryFormType) => {
     console.log('Form data:', formData);
@@ -141,29 +115,9 @@ const FoodDeliveryForm = () => {
         </div>
       </div>
       <div>list of ordered food item</div>
-      <div className="text-start fw-bold mt-4 mb-2">Checkout Details</div>
-      <div className="row mb-2">
-        <div className="col">
-          <Select
-            label="Payment Method"
-            options={paymentOptions}
-            {...register('paymentMethod', {
-              required: 'Payment Method is required',
-            })}
-            error={errors.paymentMethod}
-          />
-        </div>
-        <div className="col">
-          <Select
-            label="Delivery Within"
-            options={deliveryOptions}
-            {...register('deliveryIn', {
-              required: 'Delivery time is required',
-            })}
-            error={errors.deliveryIn}
-          />
-        </div>
-      </div>
+      <FormProvider {...method}>
+        <CheckoutForm />
+      </FormProvider>
       <div className="text-start fw-bold mt-4 mb-2">Delivery Address</div>
       <div className="row mb-3">
         <div className="col">
