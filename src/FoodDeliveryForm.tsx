@@ -1,13 +1,30 @@
 import { useForm, type FieldErrors } from 'react-hook-form';
 import TextField from './controls/TextField';
 import getRenderCount from './utils/getRenderCount';
+import Select from './controls/Select';
+import type { SelectOptionType } from './types';
 
 type FoodDeliveryFormType = {
   orderNo: string;
   customerName: string;
   mobile: string;
   email: string;
+  paymentMethod: string;
+  deliveryIn: number;
 };
+// const paymentOptions: SelectOptionType[] = ['slect', 'online', 'COD'];
+const paymentOptions: SelectOptionType[] = [
+  { value: '', text: 'Select' },
+  { value: 'online', text: 'Paid Online' },
+  { value: 'COD', text: 'Cash on Delivery' },
+];
+const deliveryOptions: SelectOptionType[] = [
+  { value: 0, text: 'Select' },
+  { value: 30, text: 'Half an Hour' },
+  { value: 60, text: '1 Hour' },
+  { value: 120, text: '2 Hours' },
+  { value: 180, text: '3 Hours' },
+];
 
 const RenderCount = getRenderCount();
 
@@ -25,6 +42,8 @@ const FoodDeliveryForm = () => {
       customerName: '',
       mobile: '',
       email: '',
+      paymentMethod: '',
+      deliveryIn: 0,
     },
   });
 
@@ -109,6 +128,32 @@ const FoodDeliveryForm = () => {
           />
         </div>
       </div>
+      <div>list of ordered food item</div>
+      <div className="row mb-2">
+        <div className="col">
+          <Select
+            label="Payment Method"
+            options={paymentOptions}
+            {...register('paymentMethod', {
+              required: 'Payment Method is required',
+            })}
+            error={errors.paymentMethod}
+          />
+        </div>
+        <div className="col">
+          <Select
+            label="Delivery Within"
+            options={deliveryOptions}
+            {...register('deliveryIn', {
+              required: 'Delivery time is required',
+            })}
+            error={errors.deliveryIn}
+          />
+        </div>
+      </div>
+      <div>check out details</div>
+      <div>delivery address</div>
+
       <button type="submit" className="btn btn-primary">
         Submit
       </button>
