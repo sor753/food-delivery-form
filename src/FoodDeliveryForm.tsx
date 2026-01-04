@@ -11,6 +11,12 @@ type FoodDeliveryFormType = {
   email: string;
   paymentMethod: string;
   deliveryIn: number;
+  address: {
+    streetAddress: string;
+    landmark: string;
+    city: string;
+    state: string;
+  };
 };
 // const paymentOptions: SelectOptionType[] = ['slect', 'online', 'COD'];
 const paymentOptions: SelectOptionType[] = [
@@ -44,6 +50,12 @@ const FoodDeliveryForm = () => {
       email: '',
       paymentMethod: '',
       deliveryIn: 0,
+      address: {
+        streetAddress: '',
+        landmark: '',
+        city: '',
+        state: '',
+      },
     },
   });
 
@@ -129,6 +141,7 @@ const FoodDeliveryForm = () => {
         </div>
       </div>
       <div>list of ordered food item</div>
+      <div className="text-start fw-bold mt-4 mb-2">Checkout Details</div>
       <div className="row mb-2">
         <div className="col">
           <Select
@@ -151,8 +164,45 @@ const FoodDeliveryForm = () => {
           />
         </div>
       </div>
-      <div>check out details</div>
-      <div>delivery address</div>
+      <div className="text-start fw-bold mt-4 mb-2">Delivery Address</div>
+      <div className="row mb-3">
+        <div className="col">
+          <TextField
+            label="Street Address"
+            {...register('address.streetAddress', {
+              required: 'Street Address is required',
+            })}
+            error={errors.address?.streetAddress}
+          />
+        </div>
+        <div className="col">
+          <TextField
+            label="City"
+            {...register('address.city', {
+              required: 'City is required',
+            })}
+            error={errors.address?.city}
+          />
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="col">
+          <TextField
+            label="Landmark"
+            {...register('address.landmark')}
+            error={errors.address?.landmark}
+          />
+        </div>
+        <div className="col">
+          <TextField
+            label="State"
+            {...register('address.state', {
+              required: 'State is required',
+            })}
+            error={errors.address?.state}
+          />
+        </div>
+      </div>
 
       <button type="submit" className="btn btn-primary">
         Submit

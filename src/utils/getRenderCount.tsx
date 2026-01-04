@@ -3,7 +3,7 @@ const getRenderCount = () => {
 
   return () => {
     count++;
-    console.log('count', count);
+    // console.log('count', count);
     return <div>Render count : {count / 2}</div>;
   };
 };
