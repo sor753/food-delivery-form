@@ -4,6 +4,7 @@ import CheckoutForm from './components/CheckoutForm';
 import type { FoodDeliveryFormType } from '../../types';
 import DeliveryAddressForm from './components/DeliveryAddressForm';
 import FoodDeliveryMaster from './components/FoodDeliveryMaster';
+import SubmitButton from '../../controls/SubmitButton';
 
 const RenderCount = getRenderCount();
 
@@ -30,10 +31,11 @@ const FoodDeliveryForm = () => {
 
   const {
     handleSubmit,
-    // formState: { errors },
+    formState: { isSubmitting },
   } = method;
 
-  const onSubmit = (formData: FoodDeliveryFormType) => {
+  const onSubmit = async (formData: FoodDeliveryFormType) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log('Form data:', formData);
   };
 
@@ -55,10 +57,11 @@ const FoodDeliveryForm = () => {
         <CheckoutForm />
         <DeliveryAddressForm />
       </FormProvider>
-
-      <button type="submit" className="btn btn-primary">
-        Submit
-      </button>
+      <SubmitButton
+        isSubmitting={isSubmitting}
+        value="Submit"
+        className="btn-primary"
+      />
     </form>
   );
 };
