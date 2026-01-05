@@ -29,7 +29,12 @@ const FoodDeliveryForm = () => {
     },
   });
 
-  const { handleSubmit, control } = method;
+  const {
+    handleSubmit,
+    control,
+    // getFieldState,
+    // formState: { touchedFields },
+  } = method;
 
   const onSubmit = async (formData: FoodDeliveryFormType) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));

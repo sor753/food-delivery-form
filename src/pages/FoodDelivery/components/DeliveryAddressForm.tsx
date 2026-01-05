@@ -6,7 +6,9 @@ import getRenderCount from '../../../utils/getRenderCount';
 const RenderCount = getRenderCount();
 
 const DeliveryAddressForm = () => {
-  const { register } = useFormContext<{ address: DeliveryAddressFormType }>();
+  const { register, getFieldState } = useFormContext<{
+    address: DeliveryAddressFormType;
+  }>();
 
   const { errors } = useFormState<{ address: DeliveryAddressFormType }>({
     name: 'address',
@@ -56,6 +58,10 @@ const DeliveryAddressForm = () => {
             error={errors.address?.state}
           />
         </div>
+      </div>
+
+      <div>
+        {getFieldState('address').isTouched && 'address node is touched'}
       </div>
     </>
   );
