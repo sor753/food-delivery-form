@@ -14,7 +14,7 @@ const FoodDeliveryMaster = () => {
 
   return (
     <>
-      <RenderCount />
+      {/* <RenderCount /> */}
 
       <div className="row mb-2">
         <div className="col">

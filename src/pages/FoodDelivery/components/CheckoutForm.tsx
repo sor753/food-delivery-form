@@ -28,7 +28,7 @@ const CheckoutForm = () => {
 
   return (
     <>
-      <RenderCount />
+      {/* <RenderCount /> */}
 
       <div className="text-start fw-bold mt-4 mb-2">Checkout Details</div>
       <div className="row mb-2">
