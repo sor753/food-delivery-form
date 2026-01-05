@@ -1,15 +1,21 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 import TextField from '../../../controls/TextField';
 import type { DeliveryAddressFormType } from '../../../types';
+import getRenderCount from '../../../utils/getRenderCount';
+
+const RenderCount = getRenderCount();
 
 const DeliveryAddressForm = () => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext<{ address: DeliveryAddressFormType }>();
+  const { register } = useFormContext<{ address: DeliveryAddressFormType }>();
+
+  const { errors } = useFormState<{ address: DeliveryAddressFormType }>({
+    name: 'address',
+  });
 
   return (
     <>
+      <RenderCount />
+
       <div className="text-start fw-bold mt-4 mb-2">Delivery Address</div>
       <div className="row mb-3">
         <div className="col">
