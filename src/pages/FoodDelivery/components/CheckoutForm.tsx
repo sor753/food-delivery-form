@@ -1,7 +1,8 @@
-import { useFormContext, useFormState } from 'react-hook-form';
+import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import Select from '../../../controls/Select';
 import type { CheckoutFormType, SelectOptionType } from '../../../types';
 import getRenderCount from '../../../utils/getRenderCount';
+import { useEffect } from 'react';
 
 // const paymentOptions: SelectOptionType[] = ['slect', 'online', 'COD'];
 const paymentOptions: SelectOptionType[] = [
@@ -26,9 +27,17 @@ const CheckoutForm = () => {
     name: ['paymentMethod', 'deliveryIn'],
   });
 
+  const paymentMethod = useWatch({
+    name: 'paymentMethod',
+  });
+  console.log(paymentMethod);
+  useEffect(() => {
+    if (paymentMethod === 'online') alert('please verify the transaction');
+  }, [paymentMethod]);
+
   return (
     <>
-      {/* <RenderCount /> */}
+      <RenderCount />
 
       <div className="text-start fw-bold mt-4 mb-2">Checkout Details</div>
       <div className="row mb-2">

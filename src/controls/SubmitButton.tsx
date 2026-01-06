@@ -1,12 +1,12 @@
 import { useFormState, type Control, type FieldValues } from 'react-hook-form';
-import getRenderCount from '../utils/getRenderCount';
+// import getRenderCount from '../utils/getRenderCount';
 
 type SubmitButtonProps<T extends FieldValues> =
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     control?: Control<T, unknown, T>;
   };
 
-const RenderCount = getRenderCount();
+// const RenderCount = getRenderCount();
 
 const SubmitButton = <T extends FieldValues>({
   className = 'btn-light',
@@ -18,7 +18,7 @@ const SubmitButton = <T extends FieldValues>({
 
   return (
     <>
-      <RenderCount />
+      {/* <RenderCount /> */}
       <button
         type="submit"
         className={`btn ${className}`}

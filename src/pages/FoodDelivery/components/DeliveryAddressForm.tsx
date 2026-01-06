@@ -1,12 +1,13 @@
 import { useFormContext, useFormState } from 'react-hook-form';
 import TextField from '../../../controls/TextField';
 import type { DeliveryAddressFormType } from '../../../types';
-import getRenderCount from '../../../utils/getRenderCount';
+// import getRenderCount from '../../../utils/getRenderCount';
 
-const RenderCount = getRenderCount();
+// const RenderCount = getRenderCount();
 
 const DeliveryAddressForm = () => {
-  const { register, getFieldState } = useFormContext<{
+  // const { register, getFieldState } = useFormContext<{
+  const { register } = useFormContext<{
     address: DeliveryAddressFormType;
   }>();
 
@@ -59,10 +60,9 @@ const DeliveryAddressForm = () => {
           />
         </div>
       </div>
-
-      <div>
+      {/* <div>
         {getFieldState('address').isTouched && 'address node is touched'}
-      </div>
+      </div> */}
     </>
   );
 };

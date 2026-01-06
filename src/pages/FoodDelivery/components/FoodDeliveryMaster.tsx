@@ -1,9 +1,9 @@
 import { useFormContext, useFormState } from 'react-hook-form';
 import TextField from '../../../controls/TextField';
 import type { FoodDeliveryMasterFormType } from '../../../types';
-import getRenderCount from '../../../utils/getRenderCount';
+// import getRenderCount from '../../../utils/getRenderCount';
 
-const RenderCount = getRenderCount();
+// const RenderCount = getRenderCount();
 
 const FoodDeliveryMaster = () => {
   const { register } = useFormContext<FoodDeliveryMasterFormType>();
