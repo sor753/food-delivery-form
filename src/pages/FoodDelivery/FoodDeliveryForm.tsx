@@ -46,8 +46,17 @@ const FoodDeliveryForm = () => {
     // 重要：watchはReactに変更があったことを伝えていないため、Reactの冪等性に関するルールに反している
     // 解決策としてuseWatchの使用を検討する
     // watch,
-    // getFieldState,
-    // formState: { touchedFields },
+    // 個々のフィールドの状態を返す。ネストされたフィールドの状態を型安全に取得したい場合に便利
+    getFieldState,
+    // フォーム全体の状態に関する情報が含まれたオブジェクト
+    // これにより、フォームアプリケーションに対するユーザーの操作を追跡することができる
+    formState: { touchedFields, dirtyFields, errors },
+    // フォームの値を読み取るための最適化されたヘルパー
+    // watchとの違いは、getValuesは再レンダリングをトリガーしたり、入力値の変更をサブスクライブしたりしないこと
+    getValues,
+    // 登録済みフィールドの値を動的に設定し、フォームの状態を検証および更新するオプションを利用できる
+    // 同時に、不要な再レンダリングを回避する
+    setValue,
   } = method;
 
   // const watchoutput = watch('paymentMethod');
@@ -76,7 +85,18 @@ const FoodDeliveryForm = () => {
   };
 
   const onError = (errors: FieldErrors<FoodDeliveryFormType>) => {
-    console.log('Form errors:', errors);
+    // console.log('Form errors:', errors);
+    // console.log(getValues('mobile'));
+  };
+
+  console.log(getFieldState('email'));
+
+  const onDemo = () => {
+    setValue('email', 'email123', {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
   return (
@@ -94,6 +114,9 @@ const FoodDeliveryForm = () => {
         <DeliveryAddressForm />
       </FormProvider>
       <SubmitButton control={control} value="Submit" className="btn-primary" />
+      <button className="btn btn-secondary ms-2" onClick={onDemo} type="button">
+        Demo
+      </button>
     </form>
   );
 };
