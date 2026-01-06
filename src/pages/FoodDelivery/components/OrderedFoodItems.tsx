@@ -13,6 +13,7 @@ import TextField from '../../../controls/TextField';
 import { useEffect, useState } from 'react';
 import { getFoodItems } from '../../../db';
 import Select from '../../../controls/Select';
+import { roundTo2DecimalPoint } from '../../../utils';
 // import getRenderCount from '../../../utils/getRenderCount';
 
 // const RenderCount = getRenderCount();
@@ -32,8 +33,8 @@ const OrderedFoodItems = () => {
       setFoodOptions([{ value: 0, text: 'Select' }, ...tmpOptions]);
     })();
   }, []);
-  // const { register, setValue } = useFormContext<{
-  const { register } = useFormContext<{
+
+  const { register, setValue, getValues } = useFormContext<{
     foodItems: OrderedFoodItemType[];
   }>();
 
@@ -122,10 +123,31 @@ const OrderedFoodItems = () => {
     remove(index);
   };
 
-  const foodItems = useWatch({
+  const onFoodChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    rowIndex: number
+  ) => {
+    const foodId = +e.target.value;
+    let price: number;
+    if (foodId === 0) price = 0;
+    else price = foodList.find((food) => food.foodId === foodId)?.price || 0;
+    setValue(`foodItems.${rowIndex}.price`, price);
+    updateRowTotalPrice(rowIndex);
+  };
+
+  const updateRowTotalPrice = (rowIndex: number) => {
+    const { price, quantity } = getValues(`foodItems.${rowIndex}`);
+    let totalPrice = 0;
+    if (quantity && quantity > 0) totalPrice = price * quantity;
+    setValue(
+      `foodItems.${rowIndex}.totalPrice`,
+      roundTo2DecimalPoint(totalPrice)
+    );
+  };
+
+  useWatch({
     name: ['foodItems'],
   });
-  console.log(foodItems);
 
   return (
     <>
@@ -156,18 +178,40 @@ const OrderedFoodItems = () => {
                 <td>
                   <Select
                     options={foodOptions}
-                    {...register(`foodItems.${i}.foodId` as const)}
+                    error={errors.foodItems && errors.foodItems[i]?.foodId}
+                    {...register(`foodItems.${i}.foodId` as const, {
+                      // 通常はNumberを返す。問題が発生した場合は NaN が返される
+                      valueAsNumber: true,
+                      min: {
+                        value: 1,
+                        message: 'Please select a food item',
+                      },
+                      onChange: (e) => {
+                        onFoodChange(e, i);
+                      },
+                    })}
                   />
                 </td>
-                <td>price</td>
+                <td>{'$' + getValues(`foodItems.${i}.price` as const)}</td>
                 <td>
                   <TextField
                     type="number"
                     min={0}
-                    {...register(`foodItems.${i}.quantity` as const)}
+                    error={errors.foodItems && errors.foodItems[i]?.quantity}
+                    {...register(`foodItems.${i}.quantity` as const, {
+                      valueAsNumber: true,
+                      required: '< 1.',
+                      min: {
+                        value: 1,
+                        message: '< 1.',
+                      },
+                      onChange: () => {
+                        updateRowTotalPrice(i);
+                      },
+                    })}
                   />
                 </td>
-                <td>total price</td>
+                <td>{'$' + getValues(`foodItems.${i}.totalPrice` as const)}</td>
                 <td>
                   <button
                     type="button"

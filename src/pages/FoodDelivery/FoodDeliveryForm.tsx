@@ -55,7 +55,7 @@ const FoodDeliveryForm = () => {
     // formState: { touchedFields, dirtyFields, errors },
     // フォームの値を読み取るための最適化されたヘルパー
     // watchとの違いは、getValuesは再レンダリングをトリガーしたり、入力値の変更をサブスクライブしたりしないこと
-    // getValues,
+    getValues,
     // 登録済みフィールドの値を動的に設定し、フォームの状態を検証および更新するオプションを利用できる
     // 同時に、不要な再レンダリングを回避する
     // setValue,
@@ -99,6 +99,8 @@ const FoodDeliveryForm = () => {
     //   shouldDirty: true,
     //   shouldTouch: true,
     // });
+    console.log(getValues('foodItems.0.foodId'));
+    console.log(typeof getValues('foodItems.0.foodId'));
   };
 
   return (

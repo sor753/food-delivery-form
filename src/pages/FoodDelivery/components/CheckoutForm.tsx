@@ -58,6 +58,7 @@ const CheckoutForm = () => {
             options={deliveryOptions}
             {...register('deliveryIn', {
               required: 'Delivery time is required',
+              valueAsNumber: true,
             })}
             error={errors.deliveryIn}
           />
