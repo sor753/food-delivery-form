@@ -219,6 +219,15 @@ const OrderedFoodItems = () => {
                     {...register(`foodItems.${i}.quantity` as const, {
                       valueAsNumber: true,
                       required: '< 1.',
+                      validate: {
+                        notMoreThanStock: async (value: number) => {
+                          await new Promise((resolve) =>
+                            setTimeout(resolve, 1000)
+                          );
+                          if (value && value > 9) return 'Out of scock';
+                          else return true;
+                        },
+                      },
                       min: {
                         value: 1,
                         message: '< 1.',
