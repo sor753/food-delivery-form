@@ -4,13 +4,34 @@ import {
   useFormState,
   useWatch,
 } from 'react-hook-form';
-import type { OrderedFoodItemType } from '../../../types';
+import type {
+  FoodType,
+  OrderedFoodItemType,
+  SelectOptionType,
+} from '../../../types';
 import TextField from '../../../controls/TextField';
-import getRenderCount from '../../../utils/getRenderCount';
+import { useEffect, useState } from 'react';
+import { getFoodItems } from '../../../db';
+import Select from '../../../controls/Select';
+// import getRenderCount from '../../../utils/getRenderCount';
 
-const RenderCount = getRenderCount();
+// const RenderCount = getRenderCount();
 
 const OrderedFoodItems = () => {
+  const [foodList, setFoodList] = useState<FoodType[]>([]);
+  const [foodOptions, setFoodOptions] = useState<SelectOptionType[]>();
+
+  useEffect(() => {
+    (async () => {
+      const tmpList = await getFoodItems();
+      const tmpOptions: SelectOptionType[] = tmpList.map((food) => ({
+        value: food.foodId,
+        text: food.name,
+      }));
+      setFoodList(tmpList);
+      setFoodOptions([{ value: 0, text: 'Select' }, ...tmpOptions]);
+    })();
+  }, []);
   // const { register, setValue } = useFormContext<{
   const { register } = useFormContext<{
     foodItems: OrderedFoodItemType[];
@@ -39,7 +60,7 @@ const OrderedFoodItems = () => {
     // この動作を望ましくない場合は、代わりにsetValue APIを使用する
     // update,
     // フィールド配列の値全体を置き換える
-    replace,
+    // replace,
     // 特定の位置にある入力を削除。インデックスが指定されていない場合はすべてを削除
     remove,
   } = useFieldArray<{ foodItems: OrderedFoodItemType[] }>({
@@ -55,17 +76,17 @@ const OrderedFoodItems = () => {
         value: 2,
         message: 'At least two food items are required',
       },
-      validate: {
-        noDuplicate: (value, values) => {
-          console.log(values);
+      // validate: {
+      //   noDuplicate: (value, values) => {
+      //     console.log(values);
 
-          const names = value.map((item) => item.name);
-          const hasDuplicate = names.some(
-            (name, index) => name && names.indexOf(name) !== index
-          );
-          return hasDuplicate ? 'Duplicate food items are not allowed' : true;
-        },
-      },
+      //     const names = value.map((item) => item.name);
+      //     const hasDuplicate = names.some(
+      //       (name, index) => name && names.indexOf(name) !== index
+      //     );
+      //     return hasDuplicate ? 'Duplicate food items are not allowed' : true;
+      //   },
+      // },
     },
   });
 
@@ -78,7 +99,7 @@ const OrderedFoodItems = () => {
     //     focusName: `foodItems.${fields.length}.quantity`,
     //   }
     // );
-    append({ name: '', quantity: 0 });
+    append({ foodId: 0, price: 0, quantity: 0, totalPrice: 0 });
     // prepend({ name: '', quantity: 0 });
     // insert(2, { name: '', quantity: 0 });
   };
@@ -88,14 +109,14 @@ const OrderedFoodItems = () => {
     move(0, 2);
   };
 
-  const onUpdateAndReplace = () => {
-    // update(0, { name: 'Updated Food', quantity: 5 });
-    // setValue('foodItems.0.quantity', 100);
-    replace([
-      { name: 'Replaced Food 1', quantity: 1 },
-      { name: 'Replaced Food 2', quantity: 2 },
-    ]);
-  };
+  // const onUpdateAndReplace = () => {
+  //   // update(0, { name: 'Updated Food', quantity: 5 });
+  //   // setValue('foodItems.0.quantity', 100);
+  //   replace([
+  //     { name: 'Replaced Food 1', quantity: 1 },
+  //     { name: 'Replaced Food 2', quantity: 2 },
+  //   ]);
+  // };
 
   const onRowDelete = (index: number) => {
     remove(index);
@@ -108,12 +129,15 @@ const OrderedFoodItems = () => {
 
   return (
     <>
-      <RenderCount />
+      {/* <RenderCount /> */}
+      <div className="text-start fw-bold mt-4">Order Food Items</div>
       <table className="table table-borderless table-hover">
         <thead>
           <tr>
             <th>Food</th>
+            <th>Price</th>
             <th>Quantity</th>
+            <th>Total Price</th>
             <th>
               <button
                 type="button"
@@ -125,40 +149,49 @@ const OrderedFoodItems = () => {
             </th>
           </tr>
         </thead>
-        <tbody>
-          {fields.map((field, i) => (
-            <tr key={field.id}>
-              <td>
-                <TextField
-                  {...register(`foodItems.${i}.name` as const, {
-                    required: 'This field is required',
-                  })}
-                  error={errors.foodItems?.[i]?.name}
-                />
-              </td>
-              <td>
-                <TextField
-                  type="number"
-                  min={0}
-                  {...register(`foodItems.${i}.quantity` as const)}
-                />
-              </td>
-              <td>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-outline-danger"
-                  onClick={() => onRowDelete(i)}
-                >
-                  DEL
-                </button>
-              </td>
+        {foodOptions ? (
+          <tbody>
+            {fields.map((field, i) => (
+              <tr key={field.id}>
+                <td>
+                  <Select
+                    options={foodOptions}
+                    {...register(`foodItems.${i}.foodId` as const)}
+                  />
+                </td>
+                <td>price</td>
+                <td>
+                  <TextField
+                    type="number"
+                    min={0}
+                    {...register(`foodItems.${i}.quantity` as const)}
+                  />
+                </td>
+                <td>total price</td>
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => onRowDelete(i)}
+                  >
+                    DEL
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan={5}>Loading food items...</td>
             </tr>
-          ))}
-        </tbody>
+          </tbody>
+        )}
+
         {errors.foodItems?.root && (
           <tfoot>
             <tr>
-              <td colSpan={3}>
+              <td colSpan={5}>
                 <span className="error-feedback">
                   {errors.foodItems.root.message}
                 </span>
@@ -176,13 +209,13 @@ const OrderedFoodItems = () => {
           Swap and Move
         </button>
       )}
-      <button
+      {/* <button
         type="button"
         className="btn btn-sm btn-secondary"
         onClick={onUpdateAndReplace}
       >
         Update and Replace
-      </button>
+      </button> */}
     </>
   );
 };

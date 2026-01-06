@@ -14,7 +14,18 @@ export type MasterFoodDeliveryFormType = {
   email: string;
 };
 
-export type OrderedFoodItemType = { name: string; quantity: number };
+export type OrderedFoodItemType = {
+  foodId: number;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+};
+
+export type FoodType = {
+  foodId: number;
+  name: string;
+  price: number;
+};
 
 export type FoodDeliveryFormType = {
   address: DeliveryAddressFormType;

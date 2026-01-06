@@ -26,8 +26,7 @@ const FoodDeliveryForm = () => {
       email: '',
       paymentMethod: '',
       deliveryIn: 0,
-      foodItems: [{ name: '', quantity: 0 }],
-      // foodItems: [{ name: 'Chicken Tender' }, { name: 'Sweet Potato Fries' }],
+      foodItems: [{ foodId: 0, price: 0, quantity: 0, totalPrice: 0 }],
       address: {
         streetAddress: '',
         landmark: '',
