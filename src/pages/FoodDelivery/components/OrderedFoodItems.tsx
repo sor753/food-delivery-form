@@ -10,7 +10,7 @@ import type {
   SelectOptionType,
 } from '../../../types';
 import TextField from '../../../controls/TextField';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getFoodItems } from '../../../db';
 import Select from '../../../controls/Select';
 import { roundTo2DecimalPoint } from '../../../utils';
@@ -34,9 +34,11 @@ const OrderedFoodItems = () => {
     })();
   }, []);
 
-  const { register, setValue, getValues } = useFormContext<{
-    foodItems: OrderedFoodItemType[];
-  }>();
+  const { register, setValue, getValues } = useFormContext<
+    { gTotal: number } & {
+      foodItems: OrderedFoodItemType[];
+    }
+  >();
 
   const { errors } = useFormState<{ foodItems: OrderedFoodItemType[] }>({
     name: 'foodItems',
@@ -145,21 +147,35 @@ const OrderedFoodItems = () => {
     );
   };
 
-  useWatch({
-    name: ['foodItems'],
+  const selectedFoodItems = useWatch({
+    name: 'foodItems',
   });
+  useWatch({ name: 'gTotal' });
+
+  const updateGTotal = useCallback(() => {
+    let gTotal = 0;
+    if (selectedFoodItems && selectedFoodItems.length > 0)
+      selectedFoodItems.forEach((item: OrderedFoodItemType) => {
+        gTotal += item.totalPrice ?? 0;
+      });
+    setValue('gTotal', roundTo2DecimalPoint(gTotal));
+  }, [selectedFoodItems, setValue]);
+
+  useEffect(() => {
+    updateGTotal();
+  }, [selectedFoodItems, updateGTotal]);
 
   return (
     <>
       {/* <RenderCount /> */}
       <div className="text-start fw-bold mt-4">Order Food Items</div>
-      <table className="table table-borderless table-hover">
+      <table id="foodItems" className="table table-borderless table-hover">
         <thead>
           <tr>
             <th>Food</th>
-            <th>Price</th>
+            <th className="text-start">Price</th>
             <th>Quantity</th>
-            <th>Total Price</th>
+            <th className="text-start">T. Price</th>
             <th>
               <button
                 type="button"
@@ -192,7 +208,9 @@ const OrderedFoodItems = () => {
                     })}
                   />
                 </td>
-                <td>{'$' + getValues(`foodItems.${i}.price` as const)}</td>
+                <td className="text-start align-middle">
+                  {'$' + getValues(`foodItems.${i}.price` as const)}
+                </td>
                 <td>
                   <TextField
                     type="number"
@@ -211,7 +229,9 @@ const OrderedFoodItems = () => {
                     })}
                   />
                 </td>
-                <td>{'$' + getValues(`foodItems.${i}.totalPrice` as const)}</td>
+                <td className="text-start align-middle">
+                  {'$' + getValues(`foodItems.${i}.totalPrice` as const)}
+                </td>
                 <td>
                   <button
                     type="button"
@@ -232,8 +252,18 @@ const OrderedFoodItems = () => {
           </tbody>
         )}
 
-        {errors.foodItems?.root && (
-          <tfoot>
+        <tfoot>
+          {fields.length > 0 && (
+            <tr className="border-top">
+              <td colSpan={2}></td>
+              <td>G. Total</td>
+              <td className="text-start align-middle">
+                {'$' + getValues('gTotal')}
+              </td>
+              <td></td>
+            </tr>
+          )}
+          {errors.foodItems?.root && (
             <tr>
               <td colSpan={5}>
                 <span className="error-feedback">
@@ -241,8 +271,8 @@ const OrderedFoodItems = () => {
                 </span>
               </td>
             </tr>
-          </tfoot>
-        )}
+          )}
+        </tfoot>
       </table>
       {fields.length >= 4 && (
         <button
