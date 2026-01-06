@@ -8,8 +8,9 @@ import getRenderCount from '../../utils/getRenderCount';
 import CheckoutForm from './components/CheckoutForm';
 import type { FoodDeliveryFormType } from '../../types';
 import DeliveryAddressForm from './components/DeliveryAddressForm';
-import FoodDeliveryMaster from './components/FoodDeliveryMaster';
+import MasterFoodDeliveryForm from './components/MasterFoodDeliveryForm';
 import SubmitButton from '../../controls/SubmitButton';
+import OrderedFoodItems from './components/OrderedFoodItems';
 
 const RenderCount = getRenderCount();
 
@@ -25,6 +26,8 @@ const FoodDeliveryForm = () => {
       email: '',
       paymentMethod: '',
       deliveryIn: 0,
+      foodItems: [{ name: '', quantity: 0 }],
+      // foodItems: [{ name: 'Chicken Tender' }, { name: 'Sweet Potato Fries' }],
       address: {
         streetAddress: '',
         landmark: '',
@@ -47,16 +50,16 @@ const FoodDeliveryForm = () => {
     // 解決策としてuseWatchの使用を検討する
     // watch,
     // 個々のフィールドの状態を返す。ネストされたフィールドの状態を型安全に取得したい場合に便利
-    getFieldState,
+    // getFieldState,
     // フォーム全体の状態に関する情報が含まれたオブジェクト
     // これにより、フォームアプリケーションに対するユーザーの操作を追跡することができる
-    formState: { touchedFields, dirtyFields, errors },
+    // formState: { touchedFields, dirtyFields, errors },
     // フォームの値を読み取るための最適化されたヘルパー
     // watchとの違いは、getValuesは再レンダリングをトリガーしたり、入力値の変更をサブスクライブしたりしないこと
-    getValues,
+    // getValues,
     // 登録済みフィールドの値を動的に設定し、フォームの状態を検証および更新するオプションを利用できる
     // 同時に、不要な再レンダリングを回避する
-    setValue,
+    // setValue,
   } = method;
 
   // const watchoutput = watch('paymentMethod');
@@ -85,18 +88,18 @@ const FoodDeliveryForm = () => {
   };
 
   const onError = (errors: FieldErrors<FoodDeliveryFormType>) => {
-    // console.log('Form errors:', errors);
+    console.log('Form errors:', errors);
     // console.log(getValues('mobile'));
   };
 
-  console.log(getFieldState('email'));
+  // console.log(getFieldState('email'));
 
   const onDemo = () => {
-    setValue('email', 'email123', {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
+    // setValue('email', 'email123', {
+    //   shouldValidate: true,
+    //   shouldDirty: true,
+    //   shouldTouch: true,
+    // });
   };
 
   return (
@@ -108,8 +111,8 @@ const FoodDeliveryForm = () => {
       <RenderCount />
 
       <FormProvider {...method}>
-        <FoodDeliveryMaster />
-        <div>list of ordered food item</div>
+        <MasterFoodDeliveryForm />
+        <OrderedFoodItems />
         <CheckoutForm />
         <DeliveryAddressForm />
       </FormProvider>
