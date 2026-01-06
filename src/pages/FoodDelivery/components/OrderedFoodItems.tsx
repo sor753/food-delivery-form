@@ -34,7 +34,14 @@ const OrderedFoodItems = () => {
     })();
   }, []);
 
-  const { register, setValue, getValues } = useFormContext<
+  const {
+    register,
+    setValue,
+    getValues,
+    // フォームまたは入力検証を手動で実行する
+    // このメソッドは、依存検証（入力検証が他の入力の値に依存する）がある場合に便利
+    trigger,
+  } = useFormContext<
     { gTotal: number } & {
       foodItems: OrderedFoodItemType[];
     }
@@ -204,11 +211,12 @@ const OrderedFoodItems = () => {
                       },
                       onChange: (e) => {
                         onFoodChange(e, i);
+                        trigger(`foodItems.${i}.quantity` as const);
                       },
                     })}
                   />
                 </td>
-                <td className="text-start align-middle">
+                <td className="text-start pt-3">
                   {'$' + getValues(`foodItems.${i}.price` as const)}
                 </td>
                 <td>
@@ -238,7 +246,7 @@ const OrderedFoodItems = () => {
                     })}
                   />
                 </td>
-                <td className="text-start align-middle">
+                <td className="text-start pt-3">
                   {'$' + getValues(`foodItems.${i}.totalPrice` as const)}
                 </td>
                 <td>

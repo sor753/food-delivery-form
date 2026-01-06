@@ -60,6 +60,8 @@ const FoodDeliveryForm = () => {
     // 登録済みフィールドの値を動的に設定し、フォームの状態を検証および更新するオプションを利用できる
     // 同時に、不要な再レンダリングを回避する
     // setValue,
+    // プログラム的に入力にフォーカスする。入力のrefがフックフォームに登録されていること
+    setFocus,
   } = method;
 
   // const watchoutput = watch('paymentMethod');
@@ -100,8 +102,9 @@ const FoodDeliveryForm = () => {
     //   shouldDirty: true,
     //   shouldTouch: true,
     // });
-    console.log(getValues('foodItems.0.foodId'));
-    console.log(typeof getValues('foodItems.0.foodId'));
+    // console.log(getValues('foodItems.0.foodId'));
+    // console.log(typeof getValues('foodItems.0.foodId'));
+    setFocus('customerName', { shouldSelect: true });
   };
 
   return (
