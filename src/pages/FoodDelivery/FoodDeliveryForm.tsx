@@ -11,30 +11,51 @@ import DeliveryAddressForm from './components/DeliveryAddressForm';
 import MasterFoodDeliveryForm from './components/MasterFoodDeliveryForm';
 import SubmitButton from '../../controls/SubmitButton';
 import OrderedFoodItems from './components/OrderedFoodItems';
+import { createOrder, fetchLastOrder } from '../../db';
+import FormLoader from '../common/FormLoader';
 
 const RenderCount = getRenderCount();
+
+const id: number = 1;
+
+const defaultValues: FoodDeliveryFormType = {
+  orderId: 0,
+  orderNo: new Date().valueOf().toString(),
+  customerName: '',
+  mobile: '',
+  email: '',
+  gTotal: 0,
+  placedOn: new Date(),
+  paymentMethod: '',
+  deliveryIn: 0,
+  foodItems: [{ foodId: 0, price: 0, quantity: 0, totalPrice: 0 }],
+  address: {
+    streetAddress: '',
+    landmark: '',
+    city: '',
+    state: '',
+  },
+};
 
 const FoodDeliveryForm = () => {
   const method = useForm<FoodDeliveryFormType>({
     mode: 'all',
     delayError: 300,
     // reValidateMode: 'onChange',
-    defaultValues: {
-      orderNo: new Date().valueOf().toString(),
-      customerName: '',
-      mobile: '',
-      email: '',
-      gTotal: 0,
-      paymentMethod: '',
-      deliveryIn: 0,
-      foodItems: [{ foodId: 0, price: 0, quantity: 0, totalPrice: 0 }],
-      address: {
-        streetAddress: '',
-        landmark: '',
-        city: '',
-        state: '',
-      },
+    // フォーム全体にデフォルト値を設定する。同期と非同期の両方のデフォルト値の割り当てをサポート
+    // defaultValueまたはdefaultCheckedを使用して入力のデフォルト値を設定可能（詳細はReactの公式ドキュメントに記載）
+    // ただし、フォーム全体に defaultValues を使用することをお勧めします
+    defaultValues: async (): Promise<FoodDeliveryFormType> => {
+      if (id == 0) return new Promise((resolve) => resolve(defaultValues));
+      else {
+        const tmpOrder = await fetchLastOrder();
+        return new Promise((resolve) => resolve(tmpOrder ?? defaultValues));
+      }
     },
+    // 変更に反応し、フォームの値を更新する。
+    // 外部の状態やサーバーデータによってフォームを更新する必要がある場合に便利
+    // useFormにresetOptionsのkeepDefaultValues:trueが設定されていない限り、defaultValuesプロパティを上書きする
+    // values: {},
   });
 
   const {
@@ -56,7 +77,7 @@ const FoodDeliveryForm = () => {
     // formState: { touchedFields, dirtyFields, errors },
     // フォームの値を読み取るための最適化されたヘルパー
     // watchとの違いは、getValuesは再レンダリングをトリガーしたり、入力値の変更をサブスクライブしたりしないこと
-    getValues,
+    // getValues,
     // 登録済みフィールドの値を動的に設定し、フォームの状態を検証および更新するオプションを利用できる
     // 同時に、不要な再レンダリングを回避する
     // setValue,
@@ -86,7 +107,10 @@ const FoodDeliveryForm = () => {
 
   const onSubmit = async (formData: FoodDeliveryFormType) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log('Form data:', formData);
+    formData.orderId = 1;
+    formData.placedOn = new Date();
+    createOrder(formData);
+    console.log('submitted form data:', formData);
   };
 
   const onError = (errors: FieldErrors<FoodDeliveryFormType>) => {
@@ -114,7 +138,7 @@ const FoodDeliveryForm = () => {
       onSubmit={handleSubmit(onSubmit, onError)}
     >
       <RenderCount />
-
+      <FormLoader control={control} />
       <FormProvider {...method}>
         <MasterFoodDeliveryForm />
         <OrderedFoodItems />

@@ -32,3 +32,26 @@ body {
 #foodItems thead tr th:not("first-child"):not {
   width: 15%;
 }
+
+.loader {
+  position: absolute;
+  left: 48%;
+  top: 50%;
+  z-index: 999;
+  width: 60px;
+  height: 60px;
+  border-radius: 75%;
+  display: inline-block;
+  border-top: 6px solid #fff;
+  border-right: 6px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

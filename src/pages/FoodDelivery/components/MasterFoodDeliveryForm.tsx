@@ -21,7 +21,11 @@ const MasterFoodDeliveryForm = () => {
           <TextField
             label="#Order No"
             disabled
-            {...register('orderNo')}
+            {...register('orderNo', {
+              // disabledをtrueに設定すると、入力値はundefinedとなり、入力コントロールは無効となる
+              // disabledプロパティは、組み込みの検証ルールも省略する
+              // disabled: true,
+            })}
             error={errors.orderNo}
           />
         </div>
