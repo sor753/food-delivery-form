@@ -15,7 +15,8 @@ const MasterFoodDeliveryForm = () => {
   return (
     <>
       {/* <RenderCount /> */}
-
+      <input type="hidden" {...register('orderId')} />
+      <input type="hidden" {...register('placedOn')} />
       <div className="row mb-2">
         <div className="col">
           <TextField

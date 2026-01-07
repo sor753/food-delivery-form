@@ -1,6 +1,7 @@
 import {
   FormProvider,
   useForm,
+  useWatch,
   // useWatch,
   type FieldErrors,
 } from 'react-hook-form';
@@ -41,6 +42,9 @@ const FoodDeliveryForm = () => {
   const method = useForm<FoodDeliveryFormType>({
     mode: 'all',
     delayError: 300,
+    // デフォルトでは、入力が削除されても入力値は保持されるがshouldUnregisterを有効にすると、
+    // アンマウント時に入力が登録解除される
+    shouldUnregister: true,
     // reValidateMode: 'onChange',
     // フォーム全体にデフォルト値を設定する。同期と非同期の両方のデフォルト値の割り当てをサポート
     // defaultValueまたはdefaultCheckedを使用して入力のデフォルト値を設定可能（詳細はReactの公式ドキュメントに記載）
@@ -83,6 +87,8 @@ const FoodDeliveryForm = () => {
     // setValue,
     // プログラム的に入力にフォーカスする。入力のrefがフックフォームに登録されていること
     setFocus,
+    // このメソッドを使用すると、単一の入力または入力配列の登録を解除できる
+    unregister,
   } = method;
 
   // const watchoutput = watch('paymentMethod');
@@ -109,7 +115,7 @@ const FoodDeliveryForm = () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     formData.orderId = 1;
     formData.placedOn = new Date();
-    createOrder(formData);
+    // createOrder(formData);
     console.log('submitted form data:', formData);
   };
 
@@ -128,7 +134,13 @@ const FoodDeliveryForm = () => {
     // });
     // console.log(getValues('foodItems.0.foodId'));
     // console.log(typeof getValues('foodItems.0.foodId'));
-    setFocus('customerName', { shouldSelect: true });
+
+    // setFocus('customerName', { shouldSelect: true });
+
+    // レジスタコールバックを持つ入力をアンマウントしないと、入力が再度登録される
+    unregister('customerName');
+    // https://codesandbox.io/p/devbox/mw8zrh?file=%2Fsrc%2FApp.tsx%3A4%2C18
+    // https://codesandbox.io/p/devbox/imp-rhk-unregister-mldwr8?file=%2Fsrc%2FApp.tsx
   };
 
   return (
