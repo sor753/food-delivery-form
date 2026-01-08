@@ -17,9 +17,9 @@ import FormLoader from '../common/FormLoader';
 
 const RenderCount = getRenderCount();
 
-const id: number = 1;
+const id: number = 0;
 
-const defaultValues: FoodDeliveryFormType = {
+const initialValues: FoodDeliveryFormType = {
   orderId: 0,
   orderNo: new Date().valueOf().toString(),
   customerName: '',
@@ -50,10 +50,10 @@ const FoodDeliveryForm = () => {
     // defaultValueまたはdefaultCheckedを使用して入力のデフォルト値を設定可能（詳細はReactの公式ドキュメントに記載）
     // ただし、フォーム全体に defaultValues を使用することをお勧めします
     defaultValues: async (): Promise<FoodDeliveryFormType> => {
-      if (id == 0) return new Promise((resolve) => resolve(defaultValues));
+      if (id == 0) return new Promise((resolve) => resolve(initialValues));
       else {
         const tmpOrder = await fetchLastOrder();
-        return new Promise((resolve) => resolve(tmpOrder ?? defaultValues));
+        return new Promise((resolve) => resolve(tmpOrder ?? initialValues));
       }
     },
     // 変更に反応し、フォームの値を更新する。
@@ -89,7 +89,21 @@ const FoodDeliveryForm = () => {
     setFocus,
     // このメソッドを使用すると、単一の入力または入力配列の登録を解除できる
     unregister,
+    // 個々のフィールドの状態をリセットする
+    // isValid、isDirtyは再評価される
+    resetField,
+    // フォーム全体の状態、フィールド参照、およびサブスクリプションをリセットする
+    // オプションの引数があり、フォームの状態を部分的にリセットすることも可能
+    reset,
+    // formState: { defaultValues },
+    // 1 つ以上のエラーを手動で設定する
+    setError,
+    // フォーム内のエラーを手動でクリアできる
+    clearErrors,
   } = method;
+  // defaultValuesはsubscribeされていないため、useWatchを使用して再レンダリングをトリガーする
+  // useWatch({ control });
+  // console.log(defaultValues);
 
   // const watchoutput = watch('paymentMethod');
   // console.log(watchoutput);
@@ -115,6 +129,10 @@ const FoodDeliveryForm = () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     formData.orderId = 1;
     formData.placedOn = new Date();
+    setError('email', {
+      type: 'deplicateEmail',
+      message: 'The email already taken.',
+    });
     // createOrder(formData);
     console.log('submitted form data:', formData);
   };
@@ -138,9 +156,20 @@ const FoodDeliveryForm = () => {
     // setFocus('customerName', { shouldSelect: true });
 
     // レジスタコールバックを持つ入力をアンマウントしないと、入力が再度登録される
-    unregister('customerName');
+    // unregister('customerName');
     // https://codesandbox.io/p/devbox/mw8zrh?file=%2Fsrc%2FApp.tsx%3A4%2C18
     // https://codesandbox.io/p/devbox/imp-rhk-unregister-mldwr8?file=%2Fsrc%2FApp.tsx
+
+    // resetField('email', {
+    //   keepError: true,
+    //   defaultValue: 'abc@abc.com',
+    // });
+
+    // reset(initialValues, {
+    //   // keepErrors: true,
+    //   keepValues: true,
+    // });
+    clearErrors();
   };
 
   return (
