@@ -1,4 +1,7 @@
-export type CheckoutFormType = { paymentMethod: string; deliveryIn: number };
+export type CheckoutFormType = {
+  paymentMethod: '' | 'online' | 'COD';
+  deliveryIn: 0 | 30 | 60 | 120 | 180;
+};
 
 export type DeliveryAddressFormType = {
   streetAddress: string;
