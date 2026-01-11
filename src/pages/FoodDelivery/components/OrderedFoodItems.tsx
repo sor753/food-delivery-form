@@ -205,11 +205,11 @@ const OrderedFoodItems = () => {
                     error={errors.foodItems && errors.foodItems[i]?.foodId}
                     {...register(`foodItems.${i}.foodId` as const, {
                       // 通常はNumberを返す。問題が発生した場合は NaN が返される
-                      valueAsNumber: true,
-                      min: {
-                        value: 1,
-                        message: 'Please select a food item',
-                      },
+                      // valueAsNumber: true,
+                      // min: {
+                      //   value: 1,
+                      //   message: 'Please select a food item',
+                      // },
                       onChange: (e) => {
                         onFoodChange(e, i);
                         trigger(`foodItems.${i}.quantity` as const);
@@ -226,21 +226,21 @@ const OrderedFoodItems = () => {
                     min={0}
                     error={errors.foodItems && errors.foodItems[i]?.quantity}
                     {...register(`foodItems.${i}.quantity` as const, {
-                      valueAsNumber: true,
-                      required: '< 1.',
-                      validate: {
-                        notMoreThanStock: async (value: number) => {
-                          await new Promise((resolve) =>
-                            setTimeout(resolve, 1000)
-                          );
-                          if (value && value > 9) return 'Out of scock';
-                          else return true;
-                        },
-                      },
-                      min: {
-                        value: 1,
-                        message: '< 1.',
-                      },
+                      // valueAsNumber: true,
+                      // required: '< 1.',
+                      // validate: {
+                      //   notMoreThanStock: async (value: number) => {
+                      //     await new Promise((resolve) =>
+                      //       setTimeout(resolve, 1000)
+                      //     );
+                      //     if (value && value > 9) return 'Out of scock';
+                      //     else return true;
+                      //   },
+                      // },
+                      // min: {
+                      //   value: 1,
+                      //   message: '< 1.',
+                      // },
                       onChange: () => {
                         updateRowTotalPrice(i);
                       },

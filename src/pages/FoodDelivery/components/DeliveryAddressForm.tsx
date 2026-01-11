@@ -25,7 +25,7 @@ const DeliveryAddressForm = () => {
           <TextField
             label="Street Address"
             {...register('address.streetAddress', {
-              required: 'Street Address is required',
+              // required: 'Street Address is required',
             })}
             error={errors.address?.streetAddress}
           />
@@ -34,7 +34,7 @@ const DeliveryAddressForm = () => {
           <TextField
             label="City"
             {...register('address.city', {
-              required: 'City is required',
+              // required: 'City is required',
             })}
             error={errors.address?.city}
           />
@@ -45,7 +45,7 @@ const DeliveryAddressForm = () => {
           <TextField
             label="Landmark"
             {...register('address.landmark', {
-              required: 'Landmark is required',
+              // required: 'Landmark is required',
             })}
             error={errors.address?.landmark}
           />
@@ -54,7 +54,7 @@ const DeliveryAddressForm = () => {
           <TextField
             label="State"
             {...register('address.state', {
-              required: 'State is required',
+              // required: 'State is required',
             })}
             error={errors.address?.state}
           />

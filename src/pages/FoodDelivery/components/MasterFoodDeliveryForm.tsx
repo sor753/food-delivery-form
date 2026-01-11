@@ -34,15 +34,15 @@ const MasterFoodDeliveryForm = () => {
           <TextField
             label="Mobile"
             {...register('mobile', {
-              minLength: {
-                value: 10,
-                message: 'Mobile number must be at least 10 digits',
-              },
-              maxLength: {
-                value: 10,
-                message: 'Mobile number must be at most 10 digits',
-              },
-              required: 'Mobile number is required',
+              // minLength: {
+              //   value: 10,
+              //   message: 'Mobile number must be at least 10 digits',
+              // },
+              // maxLength: {
+              //   value: 10,
+              //   message: 'Mobile number must be at most 10 digits',
+              // },
+              // required: 'Mobile number is required',
             })}
             error={errors.mobile}
           />
@@ -53,7 +53,7 @@ const MasterFoodDeliveryForm = () => {
           <TextField
             label="Customer Name"
             {...register('customerName', {
-              required: 'Customer Name is required',
+              // required: 'Customer Name is required',
             })}
             error={errors.customerName}
           />
@@ -63,25 +63,25 @@ const MasterFoodDeliveryForm = () => {
             label="Email"
             type="email"
             {...register('email', {
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: 'Invalid email address',
-              },
-              validate: {
-                notFake: (value) => {
-                  return (
-                    value != 'email@gmail.com' ||
-                    'Pasrticualr email is not allowed'
-                  );
-                },
-                notFromBlackListedDomain: (value) => {
-                  return (
-                    (!value.endsWith('xyz.com') &&
-                      !value.endsWith('example.com')) ||
-                    'This domain is not allowed'
-                  );
-                },
-              },
+              // pattern: {
+              //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              //   message: 'Invalid email address',
+              // },
+              // validate: {
+              //   notFake: (value) => {
+              //     return (
+              //       value != 'email@gmail.com' ||
+              //       'Pasrticualr email is not allowed'
+              //     );
+              //   },
+              //   notFromBlackListedDomain: (value) => {
+              //     return (
+              //       (!value.endsWith('xyz.com') &&
+              //         !value.endsWith('example.com')) ||
+              //       'This domain is not allowed'
+              //     );
+              //   },
+              // },
             })}
             error={errors.email}
           />

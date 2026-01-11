@@ -4,16 +4,22 @@ import {
   useWatch,
   // useWatch,
   type FieldErrors,
+  type FieldValues,
 } from 'react-hook-form';
 import getRenderCount from '../../utils/getRenderCount';
 import CheckoutForm from './components/CheckoutForm';
-import type { FoodDeliveryFormType } from '../../types';
+import type {
+  FoodDeliveryFormType,
+  MasterFoodDeliveryFormType,
+} from '../../types';
 import DeliveryAddressForm from './components/DeliveryAddressForm';
 import MasterFoodDeliveryForm from './components/MasterFoodDeliveryForm';
 import SubmitButton from '../../controls/SubmitButton';
 import OrderedFoodItems from './components/OrderedFoodItems';
 import { createOrder, fetchLastOrder } from '../../db';
 import FormLoader from '../common/FormLoader';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { foodDeliveryFoomSchema } from '../../utils/validation';
 
 const RenderCount = getRenderCount();
 
@@ -39,7 +45,7 @@ const initialValues: FoodDeliveryFormType = {
 };
 
 const FoodDeliveryForm = () => {
-  const method = useForm<FoodDeliveryFormType>({
+  const method = useForm<FoodDeliveryFormType, unknown, FoodDeliveryFormType>({
     mode: 'all',
     delayError: 300,
     // デフォルトでは、入力が削除されても入力値は保持されるがshouldUnregisterを有効にすると、
@@ -60,6 +66,8 @@ const FoodDeliveryForm = () => {
     // 外部の状態やサーバーデータによってフォームを更新する必要がある場合に便利
     // useFormにresetOptionsのkeepDefaultValues:trueが設定されていない限り、defaultValuesプロパティを上書きする
     // values: {},
+    // 外部検証ライブラリをシームレスに使用する
+    resolver: zodResolver(foodDeliveryFoomSchema),
   });
 
   const {

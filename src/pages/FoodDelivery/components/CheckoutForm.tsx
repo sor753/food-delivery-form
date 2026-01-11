@@ -47,7 +47,7 @@ const CheckoutForm = () => {
             label="Payment Method"
             options={paymentOptions}
             {...register('paymentMethod', {
-              required: 'Payment Method is required',
+              // required: 'Payment Method is required',
             })}
             error={errors.paymentMethod}
           />
@@ -57,8 +57,8 @@ const CheckoutForm = () => {
             label="Delivery Within"
             options={deliveryOptions}
             {...register('deliveryIn', {
-              required: 'Delivery time is required',
-              valueAsNumber: true,
+              // required: 'Delivery time is required',
+              // valueAsNumber: true,
             })}
             error={errors.deliveryIn}
           />

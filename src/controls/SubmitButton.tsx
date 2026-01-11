@@ -1,19 +1,21 @@
 import { useFormState, type Control, type FieldValues } from 'react-hook-form';
 // import getRenderCount from '../utils/getRenderCount';
 
-type SubmitButtonProps<T extends FieldValues> =
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    control?: Control<T, unknown, T>;
-  };
+type SubmitButtonProps<
+  T extends FieldValues,
+  U extends FieldValues
+> = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  control?: Control<T, unknown, U>;
+};
 
 // const RenderCount = getRenderCount();
 
-const SubmitButton = <T extends FieldValues>({
+const SubmitButton = <T extends FieldValues, U extends FieldValues>({
   className = 'btn-light',
   value,
   control = undefined,
   ...props
-}: SubmitButtonProps<T>) => {
+}: SubmitButtonProps<T, U>) => {
   const { isSubmitting } = useFormState({ control });
 
   return (
